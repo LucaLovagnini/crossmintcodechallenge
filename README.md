@@ -6,10 +6,12 @@ The Crossmint Challenge is a Spring Boot command-line application designed to in
 ## Juicy Notes and Assumptions
 * Application has been designed to be as simple and self-contained as possible, therefore Spring has been used for convenient tools (e.g., DI for SOLID code, WebClient and Reactor for easy and parallel API calls with retry mechanisms)
 * Solution leverage the undocumented (😉) `/api/map/[candidateId]`, which retrieve the current status of the map. This is used for efficiently delete all elements in the current map in `deleteAll` and `replicateGoal` commands.
-* Parallel calls, backoff, jitter and request delays are implemented (see `AstralObjectService`), but they have *not* been fine-tuned.   
+* Parallel calls, backoff, jitter and request delays are implemented (see `AstralObjectService`), but they have *not* been fine-tuned. `replicateGoal` is slow, but not faster than the sequential version 😁.
 * Solution assumes that `/api/map` endpoint(s) will always return the same amount of columns for each row (i.e., only the length of the first row is checked).
 * Solution includes a **deprecated** version of the first phase command called `CreateXShapePolyanetCommand`. The author implemented it as a fast-forward solution, but the `replicateGoal` command covers the first phase solution as well. Deprecated class is left as reference.
 * Performing a `DELETE /api/polyanets` can actually delete *any* astral object (this is being used in both delete commands described below). It is not ideal for sure (and in a real case scenario we should create the proper object), but we kept the deleting logic simple.
+* To keep things simple, concurrency is not addressed in provided solution.
+* As a good practice, `mvn verify` will fail if Jacoco line coverage < 80% (except excluded classes).
 
 ## Features
 * Create various astral objects:
@@ -79,29 +81,29 @@ crossmint-challenge
 Using Maven, you can run the application and pass command-line arguments in one step:
 
 ```bash
-mvn clean package spring-boot:run -Dspring-boot.run.arguments="<command> <arguments>"
+mvn spring-boot:run -Dspring-boot.run.arguments="<command> <arguments>"
 ```
 
 ## Available Commands
 1. Create Astral Objects:
    ```bash
    # Create a Polyanet
-   mvn clean package spring-boot:run -Dspring-boot.run.arguments="create polyanet <x> <y>"
+   mvn spring-boot:run -Dspring-boot.run.arguments="create polyanet <x> <y>"
    
    # Create a Soloon with a specific color  
-   mvn clean package spring-boot:run -Dspring-boot.run.arguments="create soloon <x> <y> <color>"
+   mvn spring-boot:run -Dspring-boot.run.arguments="create soloon <x> <y> <color>"
 
    # Create a Cometh with a specific direction
-   mvn clean package spring-boot:run -Dspring-boot.run.arguments="create cometh <x> <y> <direction>"
+   mvn spring-boot:run -Dspring-boot.run.arguments="create cometh <x> <y> <direction>"
    ```
 
 2. Delete Objects:
    ```bash
    # Delete a specific astral object
-   mvn clean package spring-boot:run -Dspring-boot.run.arguments="delete <x> <y>"
+   mvn spring-boot:run -Dspring-boot.run.arguments="delete <x> <y>"
 
    # Delete all astral objects
-   mvn clean package spring-boot:run -Dspring-boot.run.arguments="deleteall"
+   mvn spring-boot:run -Dspring-boot.run.arguments="deleteall"
    ```
 
 3. Replicate Goal Map:
@@ -109,7 +111,7 @@ mvn clean package spring-boot:run -Dspring-boot.run.arguments="<command> <argume
    **IMPORTANT:** executing the `replicategoal` will first clear the whole map first.
 
    ```bash
-   mvn clean package spring-boot:run -Dspring-boot.run.arguments="replicategoal"
+   mvn spring-boot:run -Dspring-boot.run.arguments="replicategoal"
    ```
 
 ## Configuration
