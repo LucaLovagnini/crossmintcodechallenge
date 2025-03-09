@@ -3,7 +3,6 @@ package com.crossmint.challenge.commands.create;
 import com.crossmint.challenge.commands.ProcessAstralObjectCommand;
 import com.crossmint.challenge.model.Soloon;
 import com.crossmint.challenge.model.SoloonColor;
-import com.crossmint.challenge.service.AstralObjectService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

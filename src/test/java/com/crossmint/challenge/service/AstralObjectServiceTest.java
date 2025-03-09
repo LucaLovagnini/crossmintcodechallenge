@@ -27,11 +27,6 @@ public class AstralObjectServiceTest {
     private WebClient webClient;
     private AstralObjectService service;
 
-    private final String candidateId = "test-candidate-id";
-    private final int parallelDegree = 2;
-    private final int requestDelaySeconds = 0; // Set to 0 for faster tests
-    private final String mapPathFormat = "/map/%s";
-    private final String goalPathFormat = "/map/%s/goal";
     private int maxRetryAttempts = 3;
     private int backoffSeconds = 1;
     private double jitterFactor = 0.1;
@@ -337,6 +332,11 @@ public class AstralObjectServiceTest {
     }
 
     private void setupService() {
+        String candidateId = "test-candidate-id";
+        int parallelDegree = 2;
+        int requestDelaySeconds = 0; // Set to 0 for faster tests
+        String mapPathFormat = "/map/%s";
+        String goalPathFormat = "/map/%s/goal";
         this.service = new AstralObjectService(
                 webClient,
                 candidateId,
