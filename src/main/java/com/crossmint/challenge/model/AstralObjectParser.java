@@ -6,8 +6,35 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Utility class for parsing goal map data into astral object entities.
+ * <p>
+ * This parser converts the 2D grid representation of the goal map into a set of
+ * concrete astral object instances (Polyanet, Cometh, Soloon) that can be used for
+ * API operations.
+ * <p>
+ * The parser assumes that all rows in the input grid have the same number of columns
+ * as the first row.
+ */
 @UtilityClass
 public class AstralObjectParser {
+
+    /**
+     * Parses a 2D grid of string types into a set of astral objects. This is especially
+     * handy when we want to parse the current grid from the /map API.
+     * <p>
+     * This method processes each cell in the grid, creating the appropriate astral
+     * object based on the type string. Cells containing "SPACE" are ignored.
+     * <p>
+     * IMPORTANT: This method assumes that all rows have the same number of columns
+     * as the first row.
+     *
+     * @param goal A 2D list representing the grid of astral objects, where each string
+     *            identifies the type of object at that position
+     * @return A set of astral objects created from the non-empty cells in the grid
+     * @throws IllegalStateException if the grid is empty or the first row is empty
+     * @throws IllegalArgumentException if an unknown astral object type is encountered
+     */
     public Set<ApiSerializable> parseAstralObjects(List<List<String>> goal) {
         if (goal.isEmpty() || goal.getFirst().isEmpty()) {
             throw new IllegalStateException("Invalid goal response: Empty grid received");
@@ -28,6 +55,19 @@ public class AstralObjectParser {
         return astralObjects;
     }
 
+    /**
+     * Creates a specific astral object instance based on its type string.
+     * <p>
+     * This method matches the type string to the appropriate astral object class
+     * and constructs an instance with the given coordinates and any type-specific
+     * properties (like direction for Cometh or color for Soloon).
+     *
+     * @param type The string identifying the type of astral object
+     * @param row The row coordinate in the grid
+     * @param col The column coordinate in the grid
+     * @return A concrete astral object instance implementing the ApiSerializable interface
+     * @throws IllegalArgumentException if the type string doesn't match any known astral object
+     */
     private static ApiSerializable createAstralObject(String type, int row, int col) {
         return switch (type) {
             case "POLYANET" -> new Polyanet(row, col);

@@ -3,14 +3,21 @@ package com.crossmint.challenge.commands;
 import com.crossmint.challenge.model.ApiSerializable;
 import com.crossmint.challenge.model.GoalMap;
 import com.crossmint.challenge.service.AstralObjectService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
 
 @Command(mixinStandardHelpOptions = true)
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public abstract class ProcessAstralObjectCommand implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ProcessAstralObjectCommand.class);
 
@@ -20,11 +27,9 @@ public abstract class ProcessAstralObjectCommand implements Runnable {
     @Parameters(index = "1", description = "The y coordinate")
     protected int y;
 
-    private final AstralObjectService service;
+    @Autowired
+    protected AstralObjectService service;
 
-    public ProcessAstralObjectCommand(AstralObjectService service) {
-        this.service = service;
-    }
 
     protected void processAstralObject(ApiSerializable astralObject, HttpMethod method) {
         GoalMap goalMap = this.service.getGoalMap();

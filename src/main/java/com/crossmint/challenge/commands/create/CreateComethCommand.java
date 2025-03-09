@@ -3,7 +3,9 @@ package com.crossmint.challenge.commands.create;
 import com.crossmint.challenge.commands.ProcessAstralObjectCommand;
 import com.crossmint.challenge.model.Cometh;
 import com.crossmint.challenge.model.ComethDirection;
-import com.crossmint.challenge.service.AstralObjectService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
@@ -13,15 +15,14 @@ import picocli.CommandLine.Parameters;
 
 @Component
 @Command(name = "cometh", description = "Creates a Cometh at the specified coordinates.", mixinStandardHelpOptions = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class CreateComethCommand extends ProcessAstralObjectCommand {
     private static final Logger logger = LoggerFactory.getLogger(CreateComethCommand.class);
 
     @Parameters(index = "2", description = "The direction of the Cometh (UP, DOWN, LEFT, RIGHT)")
     private ComethDirection direction;
-
-    public CreateComethCommand(AstralObjectService service) {
-        super(service);
-    }
 
     @Override
     public void run() {
