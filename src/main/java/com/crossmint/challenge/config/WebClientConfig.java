@@ -12,7 +12,7 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         HttpClient httpClient = HttpClient.create()
-                .followRedirect(true); // Enable following redirects
+                .followRedirect(true);
 
         return WebClient.builder()
                 .baseUrl("https://challenge.crossmint.io/api")

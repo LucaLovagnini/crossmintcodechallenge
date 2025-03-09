@@ -12,10 +12,10 @@ import picocli.CommandLine.IFactory;
 public class CrossmintChallengeApplication implements CommandLineRunner {
 
     @Autowired
-    private IFactory picocliFactory; // Picocli's factory for dependency injection
+    private IFactory picocliFactory;
 
     @Autowired
-    private MainCommand mainCommand; // Root command
+    private MainCommand mainCommand;
 
     public static void main(String[] args) {
         SpringApplication.run(CrossmintChallengeApplication.class, args);
